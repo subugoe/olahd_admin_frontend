@@ -1,0 +1,22 @@
+version: '3.2'
+
+services:
+  olahds_admin_frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: olahds_admin_frontend
+    networks:
+      - olahd
+    ports:
+      - "8091:80"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.olahds_admin_frontend.entrypoints=http"
+      - "traefik.http.routers.olahds_admin_frontend.rule=PathPrefix(`/admin`)"
+      - "traefik.http.routers.olahds_admin_frontend.middlewares=stripprefix_admin"
+      - "traefik.http.middlewares.stripprefix_admin.stripprefix.prefixes=/admin"
+
+networks:
+  olahd:
+    name: ola-hd
